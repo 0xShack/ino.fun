@@ -9,12 +9,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import Link from 'next/link'
 
 interface Enrollment {
   id: string
   name: string
   twitter_handle: string
   created_at: string
+  fundraise_percentage: number  // Will be updated from smart contract in future
   // add other fields as needed
 }
 
@@ -74,14 +76,20 @@ export default function ContributePage() {
               <TableHead>Name</TableHead>
               <TableHead>Twitter Handle</TableHead>
               <TableHead>Date</TableHead>
+              <TableHead>Fundraise Progress</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {enrollments.map((enrollment) => (
-              <TableRow key={enrollment.id}>
+              <TableRow 
+                key={enrollment.id} 
+                className="cursor-pointer hover:bg-gray-100 transition-colors"
+                onClick={() => window.location.href = `/contribute/${enrollment.id}`}
+              >
                 <TableCell className="font-medium">{enrollment.name}</TableCell>
                 <TableCell>{enrollment.twitter_handle}</TableCell>
                 <TableCell>{new Date(enrollment.created_at).toLocaleDateString()}</TableCell>
+                <TableCell>{`${enrollment.fundraise_percentage || 0}%`}</TableCell>
               </TableRow>
             ))}
           </TableBody>
