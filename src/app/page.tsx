@@ -6,7 +6,15 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center min-h-screen p-8 gap-16">
       <main className="flex flex-col gap-12 items-center text-center">
         <div className="space-y-4">
-          <h1 className="text-6xl font-bold">INO.fun</h1>
+          <div className="flex justify-center">
+            <Image
+              src="/logo.png"
+              alt="INO.fun Logo"
+              width={200}
+              height={60}
+              priority
+            />
+          </div>
           <p className="text-xl text-muted-foreground">The Initial Nude Offering Platform</p>
         </div>
 
