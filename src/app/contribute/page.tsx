@@ -1,0 +1,92 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+
+interface Enrollment {
+  id: string
+  name: string
+  twitter_handle: string
+  created_at: string
+  // add other fields as needed
+}
+
+interface FetchResponse {
+  status: string
+  data: Enrollment[]
+  hasMore: boolean
+  nextCursor: string | null
+  meta: {
+    limit: number
+    orderBy: string
+    order: string
+  }
+}
+
+export default function ContributePage() {
+  const [enrollments, setEnrollments] = useState<Enrollment[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchEnrollments = async () => {
+      try {
+        const response = await fetch('/api/funded?limit=10&orderBy=created_at&order=desc')
+        const data: FetchResponse = await response.json()
+        
+        if (data.status === 'success') {
+          setEnrollments(data.data)
+        } else {
+          setError('Failed to fetch enrollments')
+        }
+      } catch (err) {
+        setError('Failed to fetch enrollments')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchEnrollments()
+  }, [])
+
+  if (isLoading) {
+    return <div className="flex justify-center items-center min-h-screen">Loading...</div>
+  }
+
+  if (error) {
+    return <div className="flex justify-center items-center min-h-screen text-red-500">{error}</div>
+  }
+
+  return (
+    <div className="container mx-auto py-10">
+      <h1 className="text-2xl font-bold mb-6">Contributors</h1>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Twitter Handle</TableHead>
+              <TableHead>Date</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {enrollments.map((enrollment) => (
+              <TableRow key={enrollment.id}>
+                <TableCell className="font-medium">{enrollment.name}</TableCell>
+                <TableCell>{enrollment.twitter_handle}</TableCell>
+                <TableCell>{new Date(enrollment.created_at).toLocaleDateString()}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  )
+} 

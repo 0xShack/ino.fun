@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { EnrollmentData } from "@/components/enroll/enrollment-form";
+import { EnrollmentData } from "../enrollment-form";
+import { UploadDropzone } from "@/utils/uploadthing";
 
 type StepProps = {
   data: EnrollmentData;
@@ -11,37 +12,39 @@ export function PersonalInfoStep({ data, updateFields }: StepProps) {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="firstName">First Name</Label>
+        <Label htmlFor="name">Name</Label>
         <Input
-          id="firstName"
+          id="name"
           required
-          value={data.personalInfo.firstName}
+          value={data.personalInfo.name}
           onChange={e => updateFields({ 
-            personalInfo: { ...data.personalInfo, firstName: e.target.value }
+            personalInfo: { ...data.personalInfo, name: e.target.value }
           })}
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="lastName">Last Name</Label>
-        <Input
-          id="lastName"
-          required
-          value={data.personalInfo.lastName}
-          onChange={e => updateFields({ 
-            personalInfo: { ...data.personalInfo, lastName: e.target.value }
-          })}
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="dateOfBirth">Date of Birth</Label>
-        <Input
-          id="dateOfBirth"
-          type="date"
-          required
-          value={data.personalInfo.dateOfBirth}
-          onChange={e => updateFields({ 
-            personalInfo: { ...data.personalInfo, dateOfBirth: e.target.value }
-          })}
+        <Label>Profile Picture (Required)</Label>
+        <UploadDropzone
+          endpoint="profileImage"
+          onUploadBegin={() => {
+            // Optional: Show loading state
+          }}
+          onClientUploadComplete={(res) => {
+            if (res?.[0]) {
+              updateFields({ 
+                personalInfo: { 
+                  ...data.personalInfo, 
+                  profilePicture: { 
+                    url: res[0].url, 
+                    key: res[0].key 
+                  } 
+                }
+              });
+            }
+          }}
+          onUploadError={(error: Error) => {
+            console.error(error);
+          }}
         />
       </div>
     </div>

@@ -11,27 +11,17 @@ export function ReviewStep({ data }: StepProps) {
       <div>
         <h3 className="font-medium mb-2">Personal Information</h3>
         <div className="space-y-1 text-sm">
-          <p>First Name: {data.personalInfo.firstName}</p>
-          <p>Last Name: {data.personalInfo.lastName}</p>
-          <p>Date of Birth: {data.personalInfo.dateOfBirth}</p>
+          <p>Name: {data.personalInfo.name}</p>
+          <p>Profile Picture: {data.personalInfo.profilePicture ? 
+            data.personalInfo.profilePicture.url : 
+            'No image uploaded'}</p>
         </div>
       </div>
 
       <div>
-        <h3 className="font-medium mb-2">Contact Information</h3>
+        <h3 className="font-medium mb-2">Social Information</h3>
         <div className="space-y-1 text-sm">
-          <p>Email: {data.contactInfo.email}</p>
-          <p>Phone: {data.contactInfo.phone}</p>
-          <p>Address: {data.contactInfo.address}</p>
-        </div>
-      </div>
-
-      <div>
-        <h3 className="font-medium mb-2">Preferences</h3>
-        <div className="space-y-1 text-sm">
-          <p>Notifications: {data.preferences.notifications ? 'Enabled' : 'Disabled'}</p>
-          <p>Newsletter: {data.preferences.newsletter ? 'Subscribed' : 'Not subscribed'}</p>
-          <p>Theme: {data.preferences.theme}</p>
+          <p>Twitter Handle: {data.socialInfo.twitterHandle}</p>
         </div>
       </div>
     </div>
