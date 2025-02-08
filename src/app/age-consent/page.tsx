@@ -3,11 +3,15 @@ import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
+interface PageProps {
+  searchParams: {
+    returnUrl?: string;
+  };
+}
+
 export default async function AgeConsent({
   searchParams,
-}: {
-  searchParams: { returnUrl?: string };
-}) {
+}: PageProps) {
   async function setConsent() {
     "use server";
     (await cookies()).set("age-consent", "true", {

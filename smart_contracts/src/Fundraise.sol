@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -18,10 +18,9 @@ contract Fundraise is Ownable, Pausable {
     event Claimed(address indexed claimer, uint256 amount);
     event WhitelistedClaimerSet(address indexed claimer);
 
-    constructor(address _usdc, address _owner) {
+    constructor(address _usdc, address _owner) Ownable(_owner) Pausable() {
         usdc = IERC20(_usdc);
         endTime = block.timestamp + DURATION;
-        _transferOwnership(_owner);
     }
 
     modifier notExpired() {
