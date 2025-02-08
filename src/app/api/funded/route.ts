@@ -6,9 +6,9 @@ type SortField = 'created_at' | 'name' | 'twitter_handle';
 
 interface QueryParams {
   cursor?: string;
-  limit?: number;
-  orderBy?: SortField;
-  order?: SortOrder;
+  limit: number;
+  orderBy: SortField;
+  order: SortOrder;
 }
 
 function validateLimit(limit: any): number | null {
