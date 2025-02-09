@@ -7,3 +7,9 @@
 [submodule "smart_contracts/lib/openzeppelin-contracts"]
 	path = smart_contracts/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "smart_contracts/lib/v2-core"]
+	path = smart_contracts/lib/v2-core
+	url = https://github.com/Uniswap/v2-core
+[submodule "smart_contracts/lib/v2-periphery"]
+	path = smart_contracts/lib/v2-periphery
+	url = https://github.com/Uniswap/v2-periphery
