@@ -11,30 +11,37 @@ export async function GET(
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
-    const { data, error } = await supabase
+    // First get the enrollment data
+    const { data: enrollment, error: enrollmentError } = await supabase
       .from('enrollments')
       .select('*')
       .eq('id', params.id)
       .single();
 
-    if (error) {
-      console.error('Database error:', error);
+    if (enrollmentError) {
+      console.error('Database error:', enrollmentError);
       return NextResponse.json({
         status: "error",
         message: "Failed to fetch enrollment"
       }, { status: 500 });
     }
 
-    if (!data) {
+    if (!enrollment) {
       return NextResponse.json({
         status: "error",
         message: "Enrollment not found"
       }, { status: 404 });
     }
 
+    // Transform the data to include profile_image
+    const transformedData = {
+      ...enrollment,
+      profile_image: enrollment.profile_picture_url || null,
+    };
+
     return NextResponse.json({
       status: "success",
-      data
+      data: transformedData
     });
 
   } catch (error) {

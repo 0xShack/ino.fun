@@ -18,6 +18,7 @@ interface Enrollment {
   twitter_handle: string
   created_at: string
   fundraise_percentage: number  // Will be updated from smart contract in future
+  profile_picture_url?: string  // Add this field
   // add other fields as needed
 }
 
@@ -91,33 +92,106 @@ export default function ContributePage() {
       <Header />
       <div className="container mx-auto py-10">
         <h1 className="text-2xl font-bold mb-6">Fund</h1>
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Twitter Handle</TableHead>
-                <TableHead>Created On</TableHead>
-                <TableHead>Fundraise Progress</TableHead>
-                <TableHead>Days Remaining</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {enrollments.map((enrollment) => (
-                <TableRow 
-                  key={enrollment.id} 
-                  className="cursor-pointer hover:bg-gray-100 transition-colors"
-                  onClick={() => window.location.href = `/contribute/${enrollment.id}`}
-                >
-                  <TableCell className="font-medium">{enrollment.name}</TableCell>
-                  <TableCell>{enrollment.twitter_handle}</TableCell>
-                  <TableCell>{new Date(enrollment.created_at).toLocaleDateString()}</TableCell>
-                  <TableCell>{`${enrollment.fundraise_percentage || 0}%`}</TableCell>
-                  <TableCell>{calculateRemainingDays(enrollment.created_at)} days</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+        <div className="space-y-4">
+          {/* Header */}
+          <div className="hidden md:grid md:grid-cols-5 px-6 py-3 text-sm text-muted-foreground font-medium">
+            <div className="w-[200px] flex items-center gap-4">Name</div>
+            <div className="w-[150px]">Twitter Handle</div>
+            <div className="w-[150px]">Created On</div>
+            <div className="text-right w-[200px]">Fundraise Progress</div>
+            <div className="text-right w-[150px]">Days Remaining</div>
+          </div>
+
+          {/* Rows */}
+          {enrollments.map((enrollment) => (
+            <div
+              key={enrollment.id}
+              onClick={() => window.location.href = `/contribute/${enrollment.id}`}
+              className="rounded-lg border bg-card text-card-foreground shadow-sm hover:bg-muted/50 transition-colors cursor-pointer"
+            >
+              <div className="md:grid md:grid-cols-5 p-6 items-center">
+                {/* Mobile View - Stacked Layout */}
+                <div className="md:hidden space-y-3 mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="relative w-10 h-10 rounded-full overflow-hidden bg-muted flex-shrink-0">
+                      {enrollment.profile_picture_url ? (
+                        <img
+                          src={enrollment.profile_picture_url}
+                          alt={`${enrollment.name}'s profile`}
+                          className="object-cover w-full h-full"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-muted">
+                          <span className="text-lg text-muted-foreground">
+                            {enrollment.name.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <div className="font-medium">{enrollment.name}</div>
+                      <div className="text-sm text-muted-foreground">{enrollment.twitter_handle}</div>
+                    </div>
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    {new Date(enrollment.created_at).toLocaleDateString()}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-primary" 
+                        style={{ width: `${enrollment.fundraise_percentage || 0}%` }}
+                      />
+                    </div>
+                    <span className="text-muted-foreground text-sm min-w-[48px]">
+                      {`${enrollment.fundraise_percentage || 0}%`}
+                    </span>
+                  </div>
+                  <div className="font-medium">
+                    {calculateRemainingDays(enrollment.created_at)} days remaining
+                  </div>
+                </div>
+
+                {/* Desktop View - Grid Layout */}
+                <div className="hidden md:flex items-center gap-3">
+                  <div className="relative w-8 h-8 rounded-full overflow-hidden bg-muted flex-shrink-0">
+                    {enrollment.profile_picture_url ? (
+                      <img
+                        src={enrollment.profile_picture_url}
+                        alt={`${enrollment.name}'s profile`}
+                        className="object-cover w-full h-full"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-muted">
+                        <span className="text-sm text-muted-foreground">
+                          {enrollment.name.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <span className="font-medium">{enrollment.name}</span>
+                </div>
+                <div className="hidden md:block text-muted-foreground">{enrollment.twitter_handle}</div>
+                <div className="hidden md:block text-muted-foreground">
+                  {new Date(enrollment.created_at).toLocaleDateString()}
+                </div>
+                <div className="hidden md:flex items-center justify-end gap-2">
+                  <div className="w-[100px] h-2 bg-muted rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-primary" 
+                      style={{ width: `${enrollment.fundraise_percentage || 0}%` }}
+                    />
+                  </div>
+                  <span className="text-muted-foreground text-sm">
+                    {`${enrollment.fundraise_percentage || 0}%`}
+                  </span>
+                </div>
+                <div className="hidden md:block text-right font-medium">
+                  {calculateRemainingDays(enrollment.created_at)} days
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </>

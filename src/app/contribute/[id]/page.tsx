@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import Header from '@/components/Header'
 
 interface Enrollment {
@@ -13,6 +14,7 @@ interface Enrollment {
   twitter_handle: string
   created_at: string
   fundraise_percentage: number
+  profile_image?: string
 }
 
 export default function ContributorDetailPage() {
@@ -59,60 +61,86 @@ export default function ContributorDetailPage() {
     <>
       <Header />
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">Fund</h1>
-        <div className="space-y-6">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="grid grid-cols-1 gap-6">
-              <div className="border-b pb-4">
-                <h2 className="text-sm text-gray-500">Name</h2>
-                <p className="text-lg font-medium">{enrollment.name}</p>
-              </div>
-              
-              <div className="border-b pb-4">
-                <h2 className="text-sm text-gray-500">Twitter Handle</h2>
-                <p className="text-lg font-medium">{enrollment.twitter_handle}</p>
+        <h1 className="text-3xl font-bold mb-8">Fund Test</h1>
+        <div className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-2xl">Contributor Details</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="flex items-center gap-6">
+                <div className="relative w-24 h-24 rounded-full overflow-hidden bg-muted">
+                  {enrollment.profile_image ? (
+                    <img
+                      src={enrollment.profile_image}
+                      alt={`${enrollment.name}'s profile`}
+                      className="object-cover w-full h-full"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-muted">
+                      <span className="text-2xl text-muted-foreground">
+                        {enrollment.name.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1 grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Name</p>
+                    <p className="text-lg font-semibold">{enrollment.name}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Twitter Handle</p>
+                    <p className="text-lg font-semibold">{enrollment.twitter_handle}</p>
+                  </div>
+                </div>
               </div>
 
-              <div className="border-b pb-4">
-                <h2 className="text-sm text-gray-500">Created On</h2>
-                <div className="flex justify-between items-center">
-                  <p className="text-lg font-medium">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Created On</p>
+                  <p className="text-lg font-semibold">
                     {new Date(enrollment.created_at).toLocaleDateString()}
                   </p>
-                  <div className="text-right">
-                    <p className="text-sm text-gray-500">Days Remaining</p>
-                    <p className="text-lg font-medium">
-                      {Math.max(
-                        90 - Math.floor(
-                          (new Date().getTime() - new Date(enrollment.created_at).getTime()) 
-                          / (1000 * 60 * 60 * 24)
-                        ),
-                        0
-                      )}
-                    </p>
-                  </div>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Days Remaining</p>
+                  <p className="text-lg font-semibold">
+                    {Math.max(
+                      90 - Math.floor(
+                        (new Date().getTime() - new Date(enrollment.created_at).getTime()) 
+                        / (1000 * 60 * 60 * 24)
+                      ),
+                      0
+                    )}
+                  </p>
                 </div>
               </div>
 
-              <div className="pb-4">
-                <h2 className="text-sm text-gray-500">Fundraise Progress</h2>
-                <div className="mt-2">
-                  <Progress 
-                    value={enrollment.fundraise_percentage || 0} 
-                    className="w-full"
-                  />
-                  <div className="flex justify-between items-center mt-2">
-                    <p className="text-lg font-medium">
-                      {enrollment.fundraise_percentage || 0}%
-                    </p>
-                    <p className="text-lg font-medium">
-                      $69,000
-                    </p>
-                  </div>
+              <div>
+                <p className="text-sm text-muted-foreground mb-2">Fundraise Progress</p>
+                <Progress 
+                  value={enrollment.fundraise_percentage || 0} 
+                  className="w-full"
+                />
+                <div className="flex justify-between items-center mt-2">
+                  <p className="text-lg font-semibold">
+                    {enrollment.fundraise_percentage || 0}%
+                  </p>
+                  <p className="text-lg font-semibold">
+                    $69,000
+                  </p>
                 </div>
               </div>
+            </CardContent>
+          </Card>
 
-              <div className="grid grid-cols-2 gap-4 pt-4">
+          <div className="grid grid-cols-2 gap-4">
+            <Card>
+              <CardHeader>
+                <CardDescription>Contribute</CardDescription>
+              </CardHeader>
+              <CardContent>
                 <div className="flex gap-2">
                   <Input
                     type="number"
@@ -135,7 +163,14 @@ export default function ContributorDetailPage() {
                     Contribute
                   </Button>
                 </div>
+              </CardContent>
+            </Card>
 
+            <Card>
+              <CardHeader>
+                <CardDescription>Remove</CardDescription>
+              </CardHeader>
+              <CardContent>
                 <div className="flex gap-2">
                   <Input
                     type="number"
@@ -159,16 +194,18 @@ export default function ContributorDetailPage() {
                     Remove
                   </Button>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Claim Funds</h2>
-              <p className="text-sm text-gray-500">
+          <Card>
+            <CardHeader>
+              <CardTitle>Claim Funds</CardTitle>
+              <CardDescription>
                 Click below to claim your available funds
-              </p>
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
               <Button 
                 className="w-full"
                 onClick={() => {
@@ -177,10 +214,12 @@ export default function ContributorDetailPage() {
               >
                 Claim
               </Button>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </>
   )
 }
+
+

@@ -116,7 +116,7 @@ export default function ClaimPage() {
           
           <div className="mt-6 space-y-4">
             <p className="text-lg">
-              Amount to claim: ${enrollment.amount?.toFixed(2)}
+              Amount to claim: $69,000
             </p>
 
             {!isTwitterVerified && (

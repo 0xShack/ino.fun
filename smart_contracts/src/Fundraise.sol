@@ -4,14 +4,11 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
-import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
-import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 import "./MemecoinFactory.sol";
 
 contract Fundraise is Ownable, Pausable {
     IERC20 public usdc;
     MemecoinFactory public memecoinFactory;
-    IUniswapV2Router02 public uniswapRouter;
     address public memecoin;
     
     uint256 public constant MAX_AMOUNT = 69000e6; // $69,000 USDC (6 decimals)
