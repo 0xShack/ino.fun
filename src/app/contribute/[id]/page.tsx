@@ -59,7 +59,7 @@ export default function ContributorDetailPage() {
     <>
       <Header />
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">Contribute</h1>
+        <h1 className="text-3xl font-bold mb-8">Fund</h1>
         <div className="space-y-6">
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="grid grid-cols-1 gap-6">
@@ -74,10 +74,24 @@ export default function ContributorDetailPage() {
               </div>
 
               <div className="border-b pb-4">
-                <h2 className="text-sm text-gray-500">Enrollment Date</h2>
-                <p className="text-lg font-medium">
-                  {new Date(enrollment.created_at).toLocaleDateString()}
-                </p>
+                <h2 className="text-sm text-gray-500">Created On</h2>
+                <div className="flex justify-between items-center">
+                  <p className="text-lg font-medium">
+                    {new Date(enrollment.created_at).toLocaleDateString()}
+                  </p>
+                  <div className="text-right">
+                    <p className="text-sm text-gray-500">Days Remaining</p>
+                    <p className="text-lg font-medium">
+                      {Math.max(
+                        90 - Math.floor(
+                          (new Date().getTime() - new Date(enrollment.created_at).getTime()) 
+                          / (1000 * 60 * 60 * 24)
+                        ),
+                        0
+                      )}
+                    </p>
+                  </div>
+                </div>
               </div>
 
               <div className="pb-4">
@@ -87,9 +101,14 @@ export default function ContributorDetailPage() {
                     value={enrollment.fundraise_percentage || 0} 
                     className="w-full"
                   />
-                  <p className="text-lg font-medium mt-2">
-                    {enrollment.fundraise_percentage || 0}%
-                  </p>
+                  <div className="flex justify-between items-center mt-2">
+                    <p className="text-lg font-medium">
+                      {enrollment.fundraise_percentage || 0}%
+                    </p>
+                    <p className="text-lg font-medium">
+                      $69,000
+                    </p>
+                  </div>
                 </div>
               </div>
 

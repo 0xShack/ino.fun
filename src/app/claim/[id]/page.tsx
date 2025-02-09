@@ -21,7 +21,7 @@ export default function ClaimPage() {
   const [enrollment, setEnrollment] = useState<Enrollment | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [proofImage, setProofImage] = useState<{ url: string; key: string } | null>(null);
+  const [profileImage, setprofileImage] = useState<{ url: string; key: string } | null>(null);
   const [isTwitterVerified, setIsTwitterVerified] = useState(false);
 
   useEffect(() => {
@@ -147,10 +147,10 @@ export default function ClaimPage() {
 
             <div className="space-y-2">
               <Label>Upload Proof of Nude (Required)</Label>
-              {proofImage ? (
+              {profileImage ? (
                 <div className="relative aspect-video w-full">
                   <Image
-                    src={proofImage.url}
+                    src={profileImage.url}
                     alt="Proof of work"
                     fill
                     className="object-cover rounded-lg"
@@ -158,13 +158,13 @@ export default function ClaimPage() {
                 </div>
               ) : (
                 <UploadDropzone
-                  endpoint="proofImage"
+                  endpoint="profileImage"
                   onUploadBegin={() => {
                     // Optional: Show loading state
                   }}
                   onClientUploadComplete={(res) => {
                     if (res?.[0]) {
-                      setProofImage({ 
+                      setprofileImage({ 
                         url: res[0].url, 
                         key: res[0].key 
                       });
@@ -180,7 +180,7 @@ export default function ClaimPage() {
             
             <button
               onClick={async () => {
-                if (!proofImage) {
+                if (!profileImage) {
                   alert('Please upload proof of work first');
                   return;
                 }
@@ -196,8 +196,8 @@ export default function ClaimPage() {
                       'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                      proofImageUrl: proofImage.url,
-                      proofImageKey: proofImage.key,
+                        profileImageUrl: profileImage.url,
+                      profileImageKey: profileImage.key,
                     }),
                   });
                   const result = await response.json();
@@ -211,7 +211,7 @@ export default function ClaimPage() {
                   alert('Error processing claim');
                 }
               }}
-              disabled={!proofImage || !isTwitterVerified}
+              disabled={!profileImage || !isTwitterVerified}
               className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
             >
               Claim Funds

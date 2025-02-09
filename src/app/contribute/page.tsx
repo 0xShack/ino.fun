@@ -33,6 +33,15 @@ interface FetchResponse {
   }
 }
 
+const calculateRemainingDays = (createdAt: string): number => {
+  const TOTAL_DAYS = 90;
+  const created = new Date(createdAt);
+  const today = new Date();
+  const diffTime = today.getTime() - created.getTime();
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  return Math.max(0, TOTAL_DAYS - diffDays);
+}
+
 export default function ContributePage() {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -81,15 +90,16 @@ export default function ContributePage() {
     <>
       <Header />
       <div className="container mx-auto py-10">
-        <h1 className="text-2xl font-bold mb-6">Contributors</h1>
+        <h1 className="text-2xl font-bold mb-6">Fund</h1>
         <div className="rounded-md border">
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
                 <TableHead>Twitter Handle</TableHead>
-                <TableHead>Date</TableHead>
+                <TableHead>Created On</TableHead>
                 <TableHead>Fundraise Progress</TableHead>
+                <TableHead>Days Remaining</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -103,6 +113,7 @@ export default function ContributePage() {
                   <TableCell>{enrollment.twitter_handle}</TableCell>
                   <TableCell>{new Date(enrollment.created_at).toLocaleDateString()}</TableCell>
                   <TableCell>{`${enrollment.fundraise_percentage || 0}%`}</TableCell>
+                  <TableCell>{calculateRemainingDays(enrollment.created_at)} days</TableCell>
                 </TableRow>
               ))}
             </TableBody>
